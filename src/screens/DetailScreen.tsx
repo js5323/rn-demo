@@ -1,19 +1,38 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
-export default function DetailScreen({route, navigation}) {
+import {Button, Modal} from '@ant-design/react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+type props = NativeStackScreenProps<RootStackParamList, 'Detail'>;
+
+export default function DetailScreen({route, navigation}: props) {
+  const handleUpdateTitle = () => {
+    Modal.alert('Tips', 'Sure to update title?', [
+      {text: 'Cancel', onPress: () => console.log('cancel'), style: 'cancel'},
+      {
+        text: 'OK',
+        onPress: () => {
+          navigation.setOptions({title: 'Updated --- ' + Math.random()});
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Detail Screen:</Text>
-      <Text style={styles.text2}>
+      <Text style={{marginBottom: 15}}>
         {route.params.id} {route.params.message}
       </Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Go back" onPress={() => navigation.goBack()} />
       <Button
-        title="Update the title"
-        onPress={() => navigation.setOptions({title: 'Updated!'})}
-      />
+        style={{marginBottom: 15}}
+        onPress={() => navigation.navigate('Home')}>
+        Go to Home
+      </Button>
+      <Button style={{marginBottom: 15}} onPress={() => navigation.goBack()}>
+        Back
+      </Button>
+      <Button onPress={() => handleUpdateTitle()}>Update the title</Button>
     </View>
   );
 }
